@@ -1,0 +1,20 @@
+/* -- Post Component -- */
+.post{
+    padding:10px 0px;
+}
+
+/* -- PostList Component -- */
+.postList{
+    padding:10px;
+}
+
+/* -- ContentEditor Component -- */
+.contentEditor{
+     padding:10px;
+}
+
+/* -- MainBlogContainer Component -- */
+#blogMainContent{
+    width:200px;
+    margin:auto;
+}
