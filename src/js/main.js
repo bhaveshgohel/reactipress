@@ -1,6 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+
+const ADD_POST = "ADD_POST";
+
+// Action creator for addPost Action
+function addPost(text){
+  return{
+    type: ADD_POST,
+    text,
+    author
+  }
+}
+
+// the single major state object to store all state of the application
+const initialState ={
+  posts :[]
+}
+
+//reducer
+function blogApp(state = initialState, action){
+  switch(action.type){
+    case ADD_POST:
+      posts: [
+        {
+          postText: action.text,
+          postAuthor: action.author
+        }
+      ]
+  }
+}
+
+
 var posts = [
   {
     postText: "This is Demo Post 1",
