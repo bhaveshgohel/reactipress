@@ -10,6 +10,10 @@ var config = {
         filename: 'bundle.js',
         publicPath: '/js/'
     },
+    devServer : {
+        contentBase: './src',
+        hot: true
+    },
     module: {
         loaders: [
             {

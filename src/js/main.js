@@ -1,47 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
 
-
-const ADD_POST = "ADD_POST";
-
-// Action creator for addPost Action
-function addPost(text){
-  return{
-    type: ADD_POST,
-    text,
-    author
-  }
+const initialState = {
+  posts: [
+    {
+      postText: "Default Post 1",
+      postAuthor: "Kunal"
+    },
+    {
+      postText: "Default Post 2",
+      postAuthor: "Surabhi"
+    }
+  ]
 }
 
-// the single major state object to store all state of the application
-const initialState ={
-  posts :[]
+// the main reducer of our app
+function blogApp (state = initialState, action){
+  if(action.type === "ADD_POST"){
+    return Object.assign({},state,
+      {
+        posts: [
+          ...state.posts,
+          {
+            postText: action.postText,
+            postAuthor: action.postAuthor
+          }
+        ]
+      }
+    )
+  }
+  return state;
 }
 
-//reducer
-function blogApp(state = initialState, action){
-  switch(action.type){
-    case ADD_POST:
-      posts: [
-        {
-          postText: action.text,
-          postAuthor: action.author
-        }
-      ]
+//the main store which stores all the states of application
+let store = createStore(blogApp);
+
+//add post action
+function addPost (post){
+  return {
+    type:"ADD_POST",
+    postText: post.postText,
+    postAuthor: post.postAuthor
   }
 }
+const boundAddPost = (post) => store.dispatch(addPost({postText: post.postText, postAuthor: post.postAuthor}));
 
-
-var posts = [
-  {
-    postText: "This is Demo Post 1",
-    postAuthor: "Kunal"
-  },
-  {
-    postText: "This is Demo Post 2",
-    postAuthor: "Surabhi"
-  }
-];
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState())
+)
 
 const Post = (props) => (
   <div className="post">
@@ -53,79 +60,40 @@ const Post = (props) => (
 
 const PostList = (props) => (
   <div className="postList">
-  {
-    props.blogPosts.map((currPost) => (
-      <Post postText = {currPost.postText} postAuthor = {currPost.postAuthor}></Post>
-    ))
-  }
   </div>
 );
 
 const ContentEditor = (props) => (
-  <div className="contentEditor">
-    Blog Post:
-    <br />
-    <textarea onChange = {props.handleNewPostChange}></textarea>
-    <br /><br />
-    Author Name:
-    <br />
-    <input onChange = {props.handleAuthorChange}></input>
-    <br /><br />
-    <button onClick={props.handleSubmitPostClick}> Submit Post </button>
-  </div>
-);
+    <div className="contentEditor">
+      Blog Post:
+      <br />
+      <textarea></textarea>
+      <br /><br />
+      Author Name:
+      <br />
+      <input></input>
+      <br /><br />
+      
+      <button onClick = {() => boundAddPost({postText: "New Blog Post", postAuthor: "Ann"})}> Submit Post </button>
+    </div> 
+  );
 
 class BlogMainContent extends React.Component{
   constructor (props){
     super(props);
-
-    //bind Click event function of Submit Post button
-    this.handleSubmitPostClick = this.handleSubmitPostClick.bind(this);
-
-    //bind onChange event function of Post TextArea
-    this.handleNewPostChange = this.handleNewPostChange.bind(this); 
-
-    //bind onChange event function of Author input
-    this.handleAuthorChange = this.handleAuthorChange.bind(this); 
-  }
-  handleSubmitPostClick(event){
-    posts.push({
-      postText: this.state.newPostText,
-      postAuthor: this.state.authorName
-    });
-    this.setState({
-      newPostText:""
-    });
-  }
-  handleNewPostChange(event){
-    this.setState({
-      newPostText: event.target.value,
-      value: event.target.value
-    });
-  }
-  handleAuthorChange(event){
-    this.setState({
-      authorName: event.target.value
-    });
   }
   
   render(){
     return(
       <div>
-        <PostList blogPosts={this.props.blogPosts}
-        />
-        <ContentEditor 
-          handleSubmitPostClick = {this.handleSubmitPostClick}
-          handleNewPostChange = {this.handleNewPostChange}
-          handleAuthorChange = {this.handleAuthorChange}
-          value = ""
-        />
+        <PostList />
+        <ContentEditor />
       </div>
     );
   }
 }
  
 ReactDOM.render(
-  <BlogMainContent blogPosts={posts}/>, 
+  <BlogMainContent />, 
   document.getElementById('blogMainContent')
 );
