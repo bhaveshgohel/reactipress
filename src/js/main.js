@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import { connect } from 'react-redux'
+import { Provider } from 'react-redux'
 
 const initialState = {
   posts: [
@@ -58,10 +60,35 @@ const Post = (props) => (
   </div>
 );
 
-const PostList = (props) => (
-  <div className="postList">
-  </div>
-);
+class PostList extends React.Component{
+  constructor(props){
+    super(props);
+    this.createPosts = this.createPosts.bind(this);
+  }
+  createPosts(){
+    return this.props.posts.map((post) => {
+      return(
+        <div>
+          {post.postText}
+        </div>
+      );
+    });
+  }
+  render(){
+    return(
+      <div>
+        {this.createPosts()}
+      </div>
+    )
+  }
+} 
+
+const mapStateToProps = (state) => {
+  return {
+    posts: state.posts
+  }
+}
+const PostListContainer = connect(mapStateToProps)(PostList);
 
 const ContentEditor = (props) => (
     <div className="contentEditor">
@@ -86,7 +113,7 @@ class BlogMainContent extends React.Component{
   render(){
     return(
       <div>
-        <PostList />
+        <PostListContainer />
         <ContentEditor />
       </div>
     );
@@ -94,6 +121,8 @@ class BlogMainContent extends React.Component{
 }
  
 ReactDOM.render(
-  <BlogMainContent />, 
+  <Provider store={store}>
+    <BlogMainContent />
+  </Provider>, 
   document.getElementById('blogMainContent')
 );
