@@ -69,7 +69,9 @@ class PostList extends React.Component{
     return this.props.posts.map((post) => {
       return(
         <div>
-          {post.postText}
+          Post: {post.postText}
+        <br />
+          Author: {post.postAuthor}
         </div>
       );
     });
@@ -90,20 +92,30 @@ const mapStateToProps = (state) => {
 }
 const PostListContainer = connect(mapStateToProps)(PostList);
 
-const ContentEditor = (props) => (
+const ContentEditor = (props) => {
+  let postTextInput, postAuthorInput
+  return(
     <div className="contentEditor">
       Blog Post:
       <br />
-      <textarea></textarea>
+      <textarea ref = { (node) => {postTextInput = node} }></textarea>
       <br /><br />
       Author Name:
       <br />
-      <input></input>
+      <input ref = { (node) => {postAuthorInput = node} }></input>
       <br /><br />
       
-      <button onClick = {() => boundAddPost({postText: "New Blog Post", postAuthor: "Ann"})}> Submit Post </button>
+      <button onClick = {() => {
+        boundAddPost({postText: postTextInput.value, postAuthor: postAuthorInput.value})
+        postTextInput.value = ''
+        postAuthorInput.value = ''
+      }}> 
+      Submit Post 
+      </button>
+
     </div> 
-  );
+  )
+}
 
 class BlogMainContent extends React.Component{
   constructor (props){
