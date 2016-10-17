@@ -38,7 +38,7 @@ function blogApp (state = initialState, action){
 //the main store which stores all the states of application
 let store = createStore(blogApp);
 
-//add post action
+//add post action creator
 function addPost (post){
   return {
     type:"ADD_POST",
@@ -68,7 +68,7 @@ class PostList extends React.Component{
   createPosts(){
     return this.props.posts.map((post) => {
       return(
-        <div>
+        <div className = 'post'>
           Post: {post.postText}
         <br />
           Author: {post.postAuthor}
@@ -78,7 +78,7 @@ class PostList extends React.Component{
   }
   render(){
     return(
-      <div>
+      <div className = 'postList'>
         {this.createPosts()}
       </div>
     )
