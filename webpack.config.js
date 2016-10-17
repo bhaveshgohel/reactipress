@@ -13,8 +13,7 @@ var config = {
     devServer : {
         contentBase: './src',
         hot: true,
-        historyApiFallback: true,
-        inline: true
+        historyApiFallback: true
     },
     module: {
         loaders: [
