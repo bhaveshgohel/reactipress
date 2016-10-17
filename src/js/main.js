@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { connect } from 'react-redux'
 import { Provider } from 'react-redux'
-import { Router, Route } from 'react-router'
+import { Router, Route, browserHistory } from 'react-router'
 
 const initialState = {
   posts: [
@@ -125,10 +125,16 @@ class BlogMainContent extends React.Component{
   
   render(){
     return(
+      /*
       <div>
         <PostListContainer />
         <ContentEditor />
       </div>
+      */
+      <Router history={browserHistory}>
+        <Route path={"new-post"} component={ContentEditor} />
+        <Route path={"blog"} component={PostListContainer} />
+      </Router>
     );
   }
 }
